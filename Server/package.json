@@ -1,11 +1,11 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Fullstack Deployment for ShopKuay",
   "type": "module",
   "main": "Server.js",
   "scripts": {
-    "build": "npm install",
+    "build": "npm install && npm install --prefix ../Frontend && npm run build --prefix ../Frontend",
     "start": "node Server.js",
     "dev": "nodemon Server.js"
   },
@@ -23,7 +23,8 @@
     "mongoose": "^6.1.4",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
-    "multer-storage-cloudinary": "^4.0.0"
+    "multer-storage-cloudinary": "^4.0.0",
+    "path": "^0.12.7" 
   },
   "devDependencies": {
     "concurrently": "^7.0.0",
