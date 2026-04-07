@@ -1,16 +1,19 @@
 import mongoose from "mongoose";
 
-const connectDatabse = async () => {
+const connectDatabase = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URL, {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-    });
-    console.log("Mongo Connected");
+    if (!process.env.MONGO_URL) {
+      console.error("Error: MONGO_URL is not defined in environment variables");
+      process.exit(1);
+    }
+
+    const conn = await mongoose.connect(process.env.MONGO_URL);
+    
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (err) {
-    console.log(`Error: ${err.message}`);
-    process.exit(1);
+    console.error(`Error: ${err.message}`);
+    process.exit(1); 
   }
 };
 
-export default connectDatabse;
+export default connectDatabase;
