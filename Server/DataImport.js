@@ -7,19 +7,21 @@ import asyncHandler from "express-async-handler";
 
 const ImportData = express.Router();
 
-ImportData.post(
+// เปลี่ยนจาก .post เป็น .get
+ImportData.get(
     "/user",
     asyncHandler(async (req, res) => {
-        await User.remove({});
+        await User.deleteMany({}); // ใช้ deleteMany แทน remove (เพราะ remove เลิกใช้ในเวอร์ชันใหม่)
         const importUser = await User.insertMany(users);
         res.send({ importUser });
     })
 );
 
-ImportData.post(
+// เปลี่ยนจาก .post เป็น .get
+ImportData.get(
     "/products",
     asyncHandler(async (req, res) => {
-        await Product.remove({});
+        await Product.deleteMany({}); // ใช้ deleteMany แทน remove
         const importProducts = await Product.insertMany(products);
         res.send({ importProducts });
     })
