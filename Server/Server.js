@@ -33,17 +33,21 @@ app.get("/api/config/paypal", (req, res) => {
     res.send(process.env.PAYPAL_CLIENT_ID || "sb"); 
 });
 
-// ส่วนเชื่อมต่อ Frontend สำหรับ Render
+// --- ส่วนเชื่อมต่อ Frontend สำหรับ Render ---
 const __dirname = path.resolve();
 
 if (process.env.NODE_ENV === "production") {
-    // ถอยออกจาก Server ไปหา Frontend ตามโครงสร้างไฟล์จริง
+    // ถอยออกจาก Server ไปหา Frontend ตามโครงสร้าง iHAVECPU
     const frontendBuildPath = path.join(__dirname, "..", "Frontend", "build");
     
     app.use(express.static(frontendBuildPath)); 
 
     app.get("*", (req, res) => {
-        res.sendFile(path.resolve(frontendBuildPath, "index.html"));
+        res.sendFile(path.resolve(frontendBuildPath, "index.html"), (err) => {
+            if (err) {
+                res.status(500).send("Error: ไม่พบไฟล์ index.html ในโฟลเดอร์ build");
+            }
+        });
     });
 } else {
     app.get("/", (req, res) => {
