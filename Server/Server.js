@@ -29,7 +29,7 @@ app.use(
     })
 );
 
-// 4. API Routes (ส่วนนี้ต้องอยู่ก่อนหน้าเว็บ)
+// 4. API Routes
 app.use("/api/import", ImportData);
 app.use("/api/categories", categoryRouter);
 app.use("/api/products", productRouter);
@@ -42,24 +42,26 @@ app.get("/api/config/paypal", (req, res) => {
     res.send(process.env.PAYPAL_CLIENT_ID || "sb"); 
 });
 
-// --- 5. ส่วนเชื่อมต่อ Frontend (ย้ายมาไว้ตรงนี้และแก้ Path) ---
+// --- 5. ส่วนเชื่อมต่อ Frontend (จุดที่ต้องแก้) ---
 const __dirname = path.resolve();
 
 if (process.env.NODE_ENV === "production") {
-    // ตามโครงสร้างรูป b14ffb ต้องถอยออกจาก Server ไปหา Frontend
-    app.use(express.static(path.join(__dirname, "Frontend", "build"))); 
+    // ใช้ ".." เพื่อถอยออกจากโฟลเดอร์ Server ไปหา Frontend ที่อยู่ข้างๆ กัน
+    const frontendBuildPath = path.join(__dirname, "..", "Frontend", "build");
+    
+    app.use(express.static(frontendBuildPath)); 
 
     app.get("*", (req, res) => {
-        res.sendFile(path.resolve(__dirname, "Frontend", "build", "index.html"));
+        // ส่งไฟล์ index.html จากโฟลเดอร์ build ของ Frontend
+        res.sendFile(path.resolve(frontendBuildPath, "index.html"));
     });
 } else {
-    // Root API Check สำหรับตอนรันในคอมตัวเอง
     app.get("/", (req, res) => {
         res.send("API is running...");
     });
 }
 
-// 6. Error Handling Middlewares (ต้องอยู่หลังสุดเสมอ)
+// 6. Error Handling Middlewares 
 app.use(notFound);
 app.use(errorHandler);
 
