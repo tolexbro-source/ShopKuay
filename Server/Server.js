@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import express from "express";
 import fileUpload from "express-fileupload";
 import path from "path"; 
-import connectDatabase from "./config/MongoDb.js"; // ตรวจสอบว่าใช้ตัวพิมพ์เล็ก/ใหญ่ตรงตามไฟล์จริง
+import connectDatabase from "./config/MongoDb.js"; 
 import ImportData from "./DataImport.js";
 import { errorHandler, notFound } from "./Middleware/Errors.js";
 import categoryRouter from "./Routes/CategoryRoutes.js";
